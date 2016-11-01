@@ -22,7 +22,7 @@ module.exports = Post;
 //保存对象
 Post.prototype.save = function(callback)
 {
-    var post = {username : this.user, post:this.post, time:this.time};
+    var post = {user : this.user, post:this.post, time:this.time};
 
     mongodb.open(function(err, db)
     {
@@ -37,7 +37,8 @@ Post.prototype.save = function(callback)
                 mongodb.close();
                 return callback(err);
             }
-            collection.ensureIndex('user', {unique : true}, function(err){
+            collection.ensureIndex({user:1,post:1}, {unique : true}, function(err){
+
                 collection.insert(post, {safe:true}, function(err, user){
                     mongodb.close();
                     callback(err, user);
@@ -66,7 +67,7 @@ Post.get = function(username, callback)
             var query = {};
             if(username)
             {
-                query.username = username;
+                query.user = username;
             }
 
             collection.find(query).sort({time:-1}).toArray(function(err, docs){
@@ -79,7 +80,7 @@ Post.get = function(username, callback)
 
                 var posts = [];
                 docs.forEach(function(doc, index){
-                    var post = new Post(doc.username, doc.post, doc.time);
+                    var post = new Post(doc.user, doc.post, doc.time);
                     posts.push(post);
                 });
 
