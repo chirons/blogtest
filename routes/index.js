@@ -108,7 +108,7 @@ router.post('/reg', function(req, res) {
 
 router.get('/login', checkNotLogin);
 router.get('/login', function(req, res) {
-  res.render('user', {title : '用户登录',user: req.session.user,
+  res.render('login', {title : '用户登录',posts : [], user: req.session.user,
     success: req.flash('success').toString(),
     error: req.flash('error').toString()});
 });
@@ -160,7 +160,7 @@ function checkNotLogin(req, res, next)
     if(req.session.user)
     {
       req.flash('error', '已登录');
-      return res.redirect('/login');
+      return res.redirect('/');
     }
     next();
 }
