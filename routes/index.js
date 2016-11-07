@@ -8,9 +8,7 @@ var Post = require('../models/post.js');
 router.get('/', function(req, res) {
   Post.get(null, function(err, posts){
     if(err){posts = [];}
-    res.render('index', {title : '首页', posts : posts, user: req.session.user,
-      success: req.flash('success').toString(),
-      error: req.flash('error').toString()});
+    res.render('index', {title : '首页', posts : posts});
   });
 });
 
@@ -27,9 +25,7 @@ router.get('/u/:user', function(req, res) {
         req.flash('error', err);
         return res.redirect('/');
       }
-      res.render('user', {title : user.name, posts : posts,user: req.session.user,
-        success: req.flash('success').toString(),
-        error: req.flash('error').toString()})
+      res.render('user', {title : user.name, posts : posts})
     });
   })
 });
@@ -57,9 +53,7 @@ router.post('/post', function(req, res){
 
 router.get('/reg', checkNotLogin);
 router.get('/reg', function(req, res) {
-  res.render('reg', {title:"用户注册",user: req.session.user,
-    success: req.flash('success').toString(),
-    error: req.flash('error').toString()});
+  res.render('reg', {title:"用户注册"});
 });
 
 router.post('/reg', checkNotLogin);
@@ -108,9 +102,7 @@ router.post('/reg', function(req, res) {
 
 router.get('/login', checkNotLogin);
 router.get('/login', function(req, res) {
-  res.render('login', {title : '用户登录',posts : [], user: req.session.user,
-    success: req.flash('success').toString(),
-    error: req.flash('error').toString()});
+  res.render('login', {title : '用户登录',posts : []});
 });
 
 
