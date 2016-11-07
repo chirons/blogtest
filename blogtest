@@ -1,0 +1,24 @@
+NODE_ENV=production
+DAEMON="node cluster.js"
+NAME=blogtest
+DESC=blogtest
+PIDFILE="blogtest.pid"
+
+case "$1" in 
+	start)
+		echo "Starting $DESC: " 
+		  nohup $DAEMON > /dev/null &
+		echo $1 > $PIDFILE
+		echo "$NAME"
+		;;
+	stop)
+		echo "Stopping $DESC: "
+			pid=cat $PIDFILE
+		echo "-------------PID is : $pid. please kill it.--------------"	
+		kill $pid
+			rm $PIDFILE
+		echo "$NAME."
+		;;
+	esac
+	
+	exit 0
