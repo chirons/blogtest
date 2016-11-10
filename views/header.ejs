@@ -35,7 +35,7 @@
             <ul class="nav navbar-nav">
                 <li class="active"><a href="/">首页</a></li>
                 <% if (!user) { %>
-                <li><a href="/login">登入</a></li>
+                <li><a href="/login">登录</a></li>
                 <li><a href="/reg">注册</a></li>
                 <% } else { %>
                 <li><a href="/report">图表</a></li>
@@ -46,7 +46,7 @@
             <div class="navbar-brand pull-right" id="nav-search">
                 <form class="form-search">
                 <span class="input-icon">
-                    <input type="text" placeholder="主题..." class="nav-search-input" id="nav-search-input" autocomplete="off">
+                    <input type="text" placeholder="主题..." id="nav-search-input" autocomplete="off">
                     <i class="glyphicon glyphicon-search"></i>
                 </span>
                 </form>
