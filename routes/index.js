@@ -4,6 +4,8 @@ var crypto = require('crypto');
 var User = require('../models/user.js');
 var Post = require('../models/post.js');
 
+var Report = require('../models/report.js');
+
 /* GET home page. */
 router.get('/', function(req, res) {
   Post.get(null, function(err, posts){
@@ -135,6 +137,31 @@ router.get('/logout', function(req, res) {
   res.redirect('/');
 });
 
+router.get('/report', checkLogin);
+router.get('/report', function(req, res) {
+  res.render('report', {title : '活跃度统计'});
+});
+
+router.post('/report', function(req, res) {
+  var result = {};
+
+  var _report = new Report({});
+
+  _report.getUserPostSum(function(err, data) {
+    if (err) {
+      res.render('error', { error: err });
+    }
+    console.log("结果 ： " + data);
+    var xArray = [];
+    var yArray = [];
+    data.forEach(function(sum, index){
+      xArray.push(sum._id);
+      yArray.push(sum.num);
+    });
+    var result  = {name : xArray, num : yArray};
+    res.json(result);
+  });
+});
 
 
 function checkLogin(req, res, next)

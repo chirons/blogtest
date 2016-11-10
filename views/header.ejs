@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title><%= title %> - Microblog</title>
+    <title><%= title %> - 知识库</title>
 
     <style type="text/css">
         /*body{
@@ -11,19 +11,23 @@
     </style>
     <link rel="stylesheet" href="/stylesheets/bootstrap.min.css"/>
     <link rel="stylesheet" href="/stylesheets/style.css"/>
+
+    <script type="text/javascript">
+        $(document).ready(function(){
+            $('.nav a').onclick(function(){
+                $('.nav li').removeClass('active');
+                $(this).parent().attr('class', 'active');
+            });
+        });
+    </script>
 </head>
 <body>
 <nav class="navbar  navbar-inverse" role="navigation">
     <div class="container-fluid">
-        <!-- Brand and toggle get grouped for better mobile display -->
         <div class="navbar-header">
             <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
-                <span class="sr-only">Toggle navigation</span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
             </button>
-            <a class="navbar-brand" href="#">Microblog</a>
+            <a class="navbar-brand" href="#">知识库</a>
         </div>
 
         <!-- Collect the nav links, forms, and other content for toggling -->
@@ -34,9 +38,19 @@
                 <li><a href="/login">登入</a></li>
                 <li><a href="/reg">注册</a></li>
                 <% } else { %>
+                <li><a href="/report">图表</a></li>
                 <li><a href="/logout">登出</a></li>
                 <% } %>
             </ul>
+
+            <div class="navbar-brand pull-right" id="nav-search">
+                <form class="form-search">
+                <span class="input-icon">
+                    <input type="text" placeholder="主题..." class="nav-search-input" id="nav-search-input" autocomplete="off">
+                    <i class="glyphicon glyphicon-search"></i>
+                </span>
+                </form>
+            </div>
         </div><!-- /.navbar-collapse -->
     </div><!-- /.container-fluid -->
 </nav>
