@@ -7,7 +7,7 @@ var numCPUs = os.cpus().length;
 
 var workers = {};
 
-if(cluster.isMaster)
+if(clusters.isMaster)
 {// 主进程分支
     cluster.on('death', function(worker){
         // 当一个工作进程结束时,重启工作进程
