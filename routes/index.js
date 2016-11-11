@@ -196,6 +196,32 @@ router.post('/share', function(req, res) {
   });
 });
 
+
+router.post('/search', function(req, res) {
+  console.log("进入到搜索...");
+  var share = new Share({});
+
+  var marker = req.body.marker;
+  console.log("搜索关键字 : " + marker);
+
+  share.getByMarker(marker, function(err, list){
+    console.log("进入到回调函数 : " + marker);
+
+    console.log("查询到的分享: " + list);
+    if(err)
+    {
+      req.flash('error', '符合主题[' + marker + ']的分享有 0 条');
+      res.redirect('/search');
+    }
+    else
+    {
+      res.render('/search', {searchlist : list});
+    }
+  });
+});
+
+
+
 function checkLogin(req, res, next)
 {
   if(!req.session.user)

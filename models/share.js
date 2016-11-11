@@ -10,7 +10,12 @@ var ShareSchema = new Schema({
 });
 
 ShareSchema.methods.getByMarker = function(marker, callback){
-    return this.model('share').find();
+    var query = {};
+    query['marker'] = new RegExp(marker);
+
+    this.model('share').find(query, function(err, list){
+        callback(err, list);
+    });
 };
 
 var shareModel = mongoose.model('share', ShareSchema);
