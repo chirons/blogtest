@@ -20,7 +20,6 @@ PostSchema.methods.getUserPostSum = function(callback){
             {
                 console.log("查询错误: " + err);
             }
-            console.log(result);
             callback(err, result);
         });
 };
