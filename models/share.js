@@ -18,6 +18,23 @@ ShareSchema.methods.getByMarker = function(marker, callback){
     });
 };
 
+ShareSchema.methods.getUserPostSum = function(callback){
+    console.info("进入到查询。。。。");
+    return this.model('share').aggregate(
+        {$match:{}},
+        {$project: {user: 1, num: 1}},
+        {$group: {
+            _id: '$user',
+            num: {$sum : 1}
+        }}, function(err, result){
+            if(err)
+            {
+                console.log("查询错误: " + err);
+            }
+            callback(err, result);
+        });
+};
+
 var shareModel = mongoose.model('share', ShareSchema);
 
 module.exports = shareModel;

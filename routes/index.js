@@ -146,9 +146,9 @@ router.get('/report', function(req, res) {
 router.post('/report', function(req, res) {
   var result = {};
 
-  var _report = new Report({});
+  var _share = new Share({});
 
-  _report.getUserPostSum(function(err, data) {
+  _share.getUserPostSum(function(err, data) {
     if (err) {
       res.render('error', { error: err });
     }
@@ -215,7 +215,7 @@ router.post('/search', function(req, res) {
     }
     else
     {
-      res.render('/search', {searchlist : list});
+      res.render('search', {searchkey : marker, title : '主题搜索', searchlist : list, size : list.length});
     }
   });
 });

@@ -1,10 +1,31 @@
 <% include header.ejs %>
 
-<div class="panel panel-default">
-    <div class="panel-heading">Panel heading</div>
-    <div class="panel-body">
-        <p>adfadfadsf</p>
-    </div>
+<div class="panel">
+    <div class="panel-heading bs-callout-info">符合条件[ <label class="blue"><%= searchkey %></label> ]的主题有[ <label class="green"><%= size %></label> ]条</div>
+    <ul class="pager">
+        <li class="previous disabled"><a href="#">&larr; 上一页</a></li>
+        <li class="text-center">共[   <label class="green"><%= size %></label>   ]条</li>
+        <li class="next"><a href="#">下一页 &rarr;</a></li>
+    </ul>
+    <table class="table table-striped table-hover">
+        <thead>
+            <tr class="success">
+                <td>主题</td>
+                <td>创建者</td>
+                <td>创建时间</td>
+            </tr>
+        </thead>
+        <tbody>
+            <% searchlist.forEach(function(item, k){ %>
+                <tr>
+                    <td><%= item.marker %></td>
+                    <td><%= item.user %></td>
+                    <td><%= item.time %></td>
+                </tr>
+            <% });%>
+
+        </tbody>
+    </table>
 </div>
 
 <% include footer.ejs %>

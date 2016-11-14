@@ -15,3 +15,49 @@ a {
 .purple{color:  #852b99;}
 .dark{color:  #555555;}
 .lightgrey{color:  #fafafa;}
+
+.bs-callout {
+  margin: 20px 0;
+  padding: 20px;
+  border-left: 3px solid #eee;
+}
+
+.bs-callout-danger {
+  /* background-color: #fdf7f7; */
+  border-color: #eed3d7;
+}
+
+.bs-callout-info {
+  background-color: #f4f8fa;
+  border-color: #bce8f1;
+}
+
+.bs-callout-warning {
+  background-color: #faf8f0;
+  border-color: #faebcc;
+}
+
+.label-border-left-info{
+  border-left: 3px solid #bce8f1;
+}
+
+.label-border-left-warning{
+  border-left: 3px solid #faebcc;
+}
+
+.label-border-left-danger{
+  border-left: 3px solid #eed3d7;
+}
+
+.label-border-left-error{
+  border-left: 3px solid red;
+}
+
+.label-border-left-success{
+  border-left: 3px solid #14ff26;
+}
+
+.label-border-top-success{
+  border-top: 3px solid #14ff26;
+}
+
