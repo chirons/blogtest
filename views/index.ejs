@@ -1,5 +1,12 @@
 <% include header.ejs %>
 
+<script type="text/javascript">
+    $(function(){
+        $('.nav li').removeClass('active');
+        $('.nav li a[href="/"]').parent().addClass('active');
+    });
+</script>
+
 <% if(!user){ %>
 <div class="jumbotron">
     <h1>欢迎来到<span class="blue">知识库</span></h1>

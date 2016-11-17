@@ -3,8 +3,6 @@ var router = express.Router();
 var crypto = require('crypto');
 var User = require('../models/user.js');
 var Post = require('../models/post.js');
-
-var Report = require('../models/report.js');
 var Share = require('../models/share.js');
 
 /* GET home page. */
@@ -196,18 +194,13 @@ router.post('/share', function(req, res) {
   });
 });
 
-
 router.post('/search', function(req, res) {
-  console.log("进入到搜索...");
   var share = new Share({});
 
   var marker = req.body.marker;
-  console.log("搜索关键字 : " + marker);
 
-  share.getByMarker(marker, function(err, list){
-    console.log("进入到回调函数 : " + marker);
+  /*share.getByMarker(marker, function(err, list){
 
-    console.log("查询到的分享: " + list);
     if(err)
     {
       req.flash('error', '符合主题[' + marker + ']的分享有 0 条');
@@ -216,6 +209,51 @@ router.post('/search', function(req, res) {
     else
     {
       res.render('search', {searchkey : marker, title : '主题搜索', searchlist : list, size : list.length});
+    }
+  });*/
+
+  res.render('search',{searchkey : marker, title : '主题搜索'});
+});
+
+router.post('/showshare', function(req, res) {
+
+  var _id = req.body._id;
+
+  Share.find({_id : _id}, function(err, item){
+    if(err)
+    {
+      req.flash('error', '未找到明细信息');
+      return ;
+    }
+    else
+    {
+      res.json(item[0]);
+    }
+  });
+});
+
+router.post('/search_data', function(req, res) {
+
+  var offset = req.body.offset;
+  var pagesize = req.body.pagesize;
+
+  var marker = req.body.marker;
+
+  var query = Share.find({marker : new RegExp(marker)});
+  query.limit(pagesize);
+  query.skip(offset);
+  query.exec(function(err, querylist){
+    if(err)
+    {
+      req.flash('error', '符合主题[' + marker + ']的分享有 0 条');
+      return ;
+    }
+    else
+    {
+      Share.find({marker : new RegExp(marker)}, function(err, totallist){
+        var re = {rows : querylist, total : totallist.length};
+        res.json(re);
+      });
     }
   });
 });

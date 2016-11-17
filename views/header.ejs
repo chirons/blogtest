@@ -10,28 +10,24 @@
         }*/
     </style>
     <link rel="stylesheet" href="/stylesheets/bootstrap.min.css"/>
+    <link rel="stylesheet" href="/stylesheets/bootstrap-table.min.css"/>
     <link rel="stylesheet" href="/stylesheets/style.css"/>
-
-    <script type="text/javascript">
-        $(document).ready(function(){
-            $('.nav a').onclick(function(){
-                $('.nav li').removeClass('active');
-                $(this).parent().attr('class', 'active');
-            });
-        });
-    </script>
+    <script type="text/javascript" src="/javascripts/jquery.min.js"></script>
 </head>
-<body>
-<nav class="navbar  navbar-inverse" role="navigation">
-    <div class="container-fluid">
-        <div class="navbar-header">
-            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
-            </button>
-            <a class="navbar-brand" href="#">知识库</a>
-        </div>
+<body class="bs-docs-home">
 
-        <!-- Collect the nav links, forms, and other content for toggling -->
-        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+<header class="navbar navbar-inverse navbar-fixed-top bs-docs-nav" role="banner">
+    <div class="container">
+        <div class="navbar-header">
+            <button class="navbar-toggle" type="button" data-toggle="collapse" data-target=".bs-navbar-collapse">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a href="/" class="navbar-brand">知识库</a>
+        </div>
+        <nav class="collapse navbar-collapse bs-navbar-collapse" role="navigation">
             <ul class="nav navbar-nav">
                 <li class="active"><a href="/">首页</a></li>
                 <% if (!user) { %>
@@ -56,9 +52,9 @@
                     </div><!-- /input-group -->
                 </form>
             </div>
-        </div><!-- /.navbar-collapse -->
-    </div><!-- /.container-fluid -->
-</nav>
+        </nav>
+    </div>
+</header>
 
 <div id="container" class="container">
     <% if (success) { %>

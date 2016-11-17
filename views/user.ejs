@@ -1,5 +1,10 @@
 <% include header.ejs %>
-
+<script type="text/javascript">
+    $(function(){
+        $('.nav li').removeClass('active');
+        $('.nav li a[href="/user"]').parent().addClass('active');
+    });
+</script>
 
 <% if(!user){ %>
 <div class="jumbotron">
