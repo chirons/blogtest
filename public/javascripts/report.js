@@ -34,7 +34,7 @@ $.post('/report').done(function(data) {
                 type: 'value',
                 name: '数量',
                 min: 0,
-                max: 10,
+                max: 20,
                 interval: 2,
                 axisLabel: {
                     formatter: '{value} ml'

@@ -75,7 +75,7 @@ router.post('/reg', function(req, res) {
   User.get(newUser.name, function(err, user){
     if(user)
     {
-      err = 'UserName alredy exists.';
+      err = '该用户已被大圣注册过了, 请换号注册.';
     }
     if(err)
     {
@@ -83,15 +83,12 @@ router.post('/reg', function(req, res) {
       console.log('err');
       return res.redirect('/reg');
     }
-    console.log('save');
 
     newUser.save(function(err)
     {
       if(err)
       {
         req.flash('error', err);
-        console.log('save error');
-        console.log(err);
         return res.redirect('/reg');
       }
       req.session.user = newUser;
@@ -115,7 +112,7 @@ router.post('/login', function(req, res) {
   User.get(req.body.username, function(err, user){
     if(!user)
     {
-      req.flash('error', '用户不存在');
+      req.flash('error', '该用户不存在');
       return res.redirect('/login');
     }
     if(user.password != password)
@@ -162,14 +159,10 @@ router.post('/report', function(req, res) {
   });
 });
 
-
-
-
 router.get('/share', checkLogin);
 router.get('/share', function(req, res) {
   res.render('share', {title : '知识分享'});
 });
-
 
 router.post('/share', checkLogin);
 router.post('/share', function(req, res) {
@@ -258,7 +251,36 @@ router.post('/search_data', function(req, res) {
   });
 });
 
+router.get('/user/info/:user', function(req, res) {
+  User.get(req.params.user, function(err, user){
+    if(!user)
+    {
+      req.flash('error', '该用户不存在');
+      return res.render('userinfo', {title : '个人信息'});
+    }
 
+    req.flash('user', user);
+    return res.render('userinfo', {title : '个人信息'});
+  })
+});
+
+router.post('/user/save', function(req, res) {
+
+    var user = {name : req.body.user, gender : req.body.gender, borth : req.body.borth};
+
+    User.update(user, function(err)
+    {
+        if(err)
+        {
+            req.flash('error', err);
+            return res.redirect('/userinfo');
+        }
+        req.session.user = user;
+
+        req.flash('success', '保存成功');
+        return res.redirect('/user/info/' + user.name);
+    });
+});
 
 function checkLogin(req, res, next)
 {
