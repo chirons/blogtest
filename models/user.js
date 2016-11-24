@@ -53,10 +53,37 @@ User.update = function(user, callback)
                 mongodb.close();
                 return callback(err);
             }
-            collection.update({name:user.name}, {$set:{borth:user.borth, gender:user.borth, pic:user.pic}}, function(err){
+            var tmp = {};
+            if(user.borth){tmp.borth = user.borth;}
+            if(user.gender){tmp.gender = user.gender;}
+            if(user.pic){tmp.pic = user.pic;}
+            collection.update({name:user.name}, {$set:tmp}, function(err){
                     mongodb.close();
                     callback(err);
                 });
+        });
+    });
+};
+
+User.changepwd = function(user, callback)
+{
+    mongodb.open(function(err, db)
+    {
+        if(err)
+        {
+            return callback(err);
+        }
+
+        db.collection('users', function(err, collection){
+            if(err)
+            {
+                mongodb.close();
+                return callback(err);
+            }
+            collection.update({name:user.name}, {$set:{password : user.password}}, function(err){
+                mongodb.close();
+                callback(err);
+            });
         });
     });
 };

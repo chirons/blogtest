@@ -12,8 +12,46 @@
     <link rel="stylesheet" href="/stylesheets/bootstrap.min.css"/>
     <link rel="stylesheet" href="/stylesheets/bootstrap-table.min.css"/>
     <link rel="stylesheet" href="/stylesheets/font-awesome.min.css"/>
+    <link rel="stylesheet" href="/bootstrap-fileinput/css/fileinput.min.css"/>
     <link rel="stylesheet" href="/stylesheets/style.css"/>
+    <link rel="stylesheet" href="/stylesheets/toastr.min.css"/>
     <script type="text/javascript" src="/javascripts/jquery.min.js"></script>
+    <script type="text/javascript" src="/bootstrap-fileinput/js/fileinput.min.js"></script>
+    <script type="text/javascript" src="/bootstrap-fileinput/js/locales/zh.js"></script>
+    <script type="text/javascript" src="/javascripts/toastr.min.js"></script>
+    <script type="text/javascript">
+        $(function(){
+            toastr.options = {
+                "closeButton": true,
+                "debug": false,
+                "positionClass": "toast-bottom-right",
+                "showDuration": "300",
+                "hideDuration": "1000",
+                "timeOut": "5000",
+                "extendedTimeOut": "1000",
+                "showEasing": "swing",
+                "hideEasing": "linear",
+                "showMethod": "fadeIn",
+                "hideMethod": "fadeOut"
+            };
+        });
+        function change_click()
+        {
+            $.ajax({
+                url : '/user/changepwd',
+                type: "POST",
+                data : {old_pwd:$('#old_pwd').val(),new_pwd:$('#new_pwd').val(),new_pwd1:$('#new_pwd1').val()},
+                success: function(respTxt)
+                {
+                    if(respTxt.success == true)
+                    {
+                        $('#pwd_dialog').modal('hide');
+                    }
+                    toastr.success(respTxt.msg);
+                }
+            });
+        }
+    </script>
 </head>
 <body class="bs-docs-home">
 
@@ -25,25 +63,27 @@
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
-            </button>rr
-            <a href="/" class="navbar-brand">知识库</a>
+            </button>
+            <a href="https://github.com/chirons" class="navbar-brand" style="padding-top:0px;margin: 0px;"><h3>BLOGTEST</h3></a>
         </div>
         <nav class="collapse navbar-collapse">
             <ul class="nav navbar-nav">
-                <li class="active"><a href="/">首页</a></li>
+                <li class="active"><a class="glyphicon glyphicon-home" href="/"> 首页</a></li>
                 <% if (user) { %>
-                <li><a href="/report">图表</a></li>
-                <li><a href="/share">分享</a></li>
+                <li><a class="glyphicon glyphicon-signal" href="/report"> 图表</a></li>
+                <li><a class="glyphicon glyphicon-share" href="/share"> 分享</a></li>
                 <% } %>
             </ul>
 
             <ul class="nav navbar-nav" style="right: 0px;position: absolute;">
-                <li>
-                    <form class="navbar-form navbar-right" action="/search" method="post">
-                        <input type="text" class="form-control" name="marker" id="marker" placeholder="主题..." autocomplete="off">
-                        <button class="btn btn-default" type="submit">
-                            <i class="glyphicon glyphicon-search green"></i>
-                        </button>
+                <li style="width: 235px;">
+                    <form class="navbar-form navbar-right" role="search" action="/search" method="post">
+                        <div class="input-group">
+                            <input id="marker" type="text" name="marker" class="form-control" placeholder="主题...">
+                            <span class="input-group-btn" title="Submit">
+                                <button type="submit" class="btn btn-default"><i class="glyphicon glyphicon-search green"></i></button>
+                            </span>
+                        </div>
                     </form>
                 </li>
                 <% if (!user) { %>
@@ -58,14 +98,14 @@
 
                     <ul class="pull-right dropdown-menu dropdown-yellow dropdown-caret dropdown-close">
                         <li>
-                            <a href="#">
+                            <a href="javascript:void(0);" data-toggle="modal" data-target="#pwd_dialog">
                                 <i class="glyphicon glyphicon-cog"></i>
-                                设置
+                                修改密码
                             </a>
                         </li>
 
                         <li>
-                            <a href="/user/info/<%= user.name %>">
+                            <a href="/user/info">
                                 <i class="glyphicon glyphicon-user"></i>
                                 个人资料
                             </a>
@@ -86,6 +126,40 @@
         </nav>
     </div>
 </header>
+
+<!-- Modal -->
+<div class="modal fade" id="pwd_dialog" tabindex="-1" role="dialog" aria-labelledby="pwd_dialog_title" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title" id="pwd_dialog_title">修改密码</h4>
+            </div>
+            <div class="modal-body">
+                <form role="form">
+                <div class="form-group">
+                    <label for="old_pwd">当 前 密 码</label>
+                    <input type="password" class="form-control" id="old_pwd" name="old_pwd">
+                </div>
+                <div class="form-group">
+                    <label for="new_pwd">新   密   码</label>
+                    <input type="password" class="form-control" id="new_pwd" name="new_pwd">
+                </div>
+                <div class="form-group">
+                    <label for="new_pwd1">新密码确认</label>
+                    <input type="password" class="form-control" id="new_pwd1" name="new_pwd1">
+                </div>
+                </form>
+            </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger pull-left" data-dismiss="modal">取消</button>
+                    <button type="button" class="btn btn-info" onclick="change_click();">保存</button>
+                </div>
+
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
 
 <div id="container" class="container">
     <% if (success) { %>
