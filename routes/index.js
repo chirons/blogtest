@@ -1,4 +1,5 @@
 var express = require('express');
+var fs = require('fs');
 var router = express.Router();
 var crypto = require('crypto');
 var User = require('../models/user.js');
@@ -192,19 +193,6 @@ router.post('/search', function(req, res) {
 
   var marker = req.body.marker;
 
-  /*share.getByMarker(marker, function(err, list){
-
-    if(err)
-    {
-      req.flash('error', '符合主题[' + marker + ']的分享有 0 条');
-      res.redirect('/search');
-    }
-    else
-    {
-      res.render('search', {searchkey : marker, title : '主题搜索', searchlist : list, size : list.length});
-    }
-  });*/
-
   res.render('search',{searchkey : marker, title : '主题搜索'});
 });
 
@@ -251,20 +239,29 @@ router.post('/search_data', function(req, res) {
   });
 });
 
-router.get('/user/info/:user', function(req, res) {
-  User.get(req.params.user, function(err, user){
+router.get('/user/info', function(req, res) {
+
+  User.get(req.session.user.name, function(err, user){
+
+    console.log("user is : " + user);
+    console.log("获取到的用户是: " + JSON.stringify(user));
     if(!user)
     {
+      console.log("发生了错误....");
       req.flash('error', '该用户不存在');
       return res.render('userinfo', {title : '个人信息'});
     }
+
+    req.session.user = user;
+
+    console.log("照片是：" + user.pic);
 
     req.flash('user', user);
     return res.render('userinfo', {title : '个人信息'});
   })
 });
 
-router.post('/user/save', function(req, res) {
+router.post('/user/update', function(req, res) {
 
     var user = {name : req.body.user, gender : req.body.gender, borth : req.body.borth};
 
@@ -273,13 +270,94 @@ router.post('/user/save', function(req, res) {
         if(err)
         {
             req.flash('error', err);
-            return res.redirect('/userinfo');
+
+            return res.render('userinfo', {title : '个人信息'});
         }
-        req.session.user = user;
+
+        req.session.user.gender = user.gender;
+        req.session.user.borth = user.borth;
 
         req.flash('success', '保存成功');
-        return res.redirect('/user/info/' + user.name);
+        req.flash('user', req.session.user);
+
+        return res.render('userinfo', {title : '个人信息'});
     });
+});
+
+router.post('/user/pic', function(req, res){
+
+  var upfile = req.files.upfile;
+
+  User.get(req.session.user.name, function(err, user){
+    if(!user)
+    {
+      req.flash('error', '未登录');
+      return res.redirect('/login');
+    }
+    var target_path = "../public/upload/images/" + upfile.name;
+
+    var save_path = "/upload/images/" + upfile.name;
+
+    fs.rename(upfile.path, target_path, function(err)
+    {
+      if(err)
+      {
+        req.flash('error', err);
+        return res.render('userinfo', {title : '个人信息'});
+      }
+    });
+
+    user.pic = save_path;
+
+    User.update(user, function(err)
+    {
+      if(err)
+      {
+        req.flash('error', err);
+        return res.render('userinfo', {title : '个人信息'});
+      }
+
+      req.session.user = user;
+      req.flash('success', '头像修改成功');
+      req.flash('user', req.session.user);
+      return res.render('userinfo', {title : '个人信息'});
+    });
+  });
+});
+
+router.post('/user/changepwd', function(req, res) {
+
+  var old_pwd = req.body.old_pwd;
+  var new_pwd = req.body.new_pwd;
+  var new_pwd1 = req.body.new_pwd1;
+
+  if(new_pwd != new_pwd1)
+  {
+    res.json({success : false, msg : "输入的两次密码不一致"});
+  }
+
+  var md5 = crypto.createHash('md5');
+  var password = md5.update(old_pwd).digest('base64');
+  var md6 = crypto.createHash('md5');
+  var new_password = md6.update(new_pwd).digest('base64');
+
+  if(password != req.session.user.password)
+  {
+    res.json({success : false, msg : "当前密码不正确"});
+  }
+
+  User.changepwd({name : req.session.user.name, password : new_password}, function(err)
+  {
+    if(err)
+    {
+      res.json({success : false, msg : "密码修改失败"});
+    }
+
+    req.session.user.password = new_password;
+
+    res.json({success : true, msg : "密码修改成功!"});
+  });
+
 });
 
 function checkLogin(req, res, next)

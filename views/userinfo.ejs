@@ -1,4 +1,28 @@
 <% include header.ejs %>
+
+<script type="text/javascript">
+function _init_fileinput(_id, uploadurl)
+{
+    var control = $('#' + _id);
+
+    control.fileinput({
+        language : 'zh',
+        uploadUrl : uploadurl,
+        allowedFileExtensions : ['jpg', 'png', 'gif'],
+        showUpload : true,
+        showCaption : false,
+        browseClass : 'btn btn-success',
+        previewFileIcon : '<i class="glyphicon glyphicon-king"></i>'
+    });
+}
+    function show_pic_select()
+    {
+        _init_fileinput('user_logo', '/user/pic');
+        $('#select_pic_pre').hide();
+        $('#select_pic_div').show();
+    }
+
+</script>
 <!-- BEGIN PAGE CONTENT-->
 <div class="row" style="padding-top: 20px;">
     <div class="col-md-12">
@@ -13,7 +37,7 @@
                     <div class="row">
                         <div class="col-md-3">
                             <ul class="list-unstyled">
-                                <li><img src="/images/qq.png" alt="" />
+                                <li><img src="<%= user.pic %>" width="335px" alt="" />
                                 </li>
                             </ul>
                         </div>
@@ -35,14 +59,17 @@
                 <div class="tab-pane" id="tab_1_3" style="padding-top: 20px;">
                     <div class="row">
                         <div class="col-md-3 text-center">
-                            <p><img src="/images/qq.png" alt="" /></p>
-                            <a><i class="icon-picture"></i>修改头像</a>
+                            <form method="post" action="/user/pic" enctype="multipart/form-data">
+                            <div id="select_pic_pre"><p><img src="<%= user.pic %>" width="335px" alt="" /></p>
+                            <a><i class="icon-picture"></i><a href="javascript:void(0);" onclick="show_pic_select();">修改头像</a></a></div>
+                            <div id="select_pic_div" style="display: none;">修改头像<input type="file" class="file" name="upfile" id="user_logo"></div>
                             <span class="after"></span>
+                            </form>
                         </div>
                         <div class="col-md-9">
                             <div class="tab-content">
                                 <div id="tab_1-1" class="tab-pane active">
-                                    <form role="form" action="/user/save" method="post">
+                                    <form role="form" action="/user/update" method="post">
                                         <div class="form-group">
                                             <label class="control-label">Name</label>
                                             <input type="text" value="<%= user.name%>" name="user" readonly class="form-control" />
