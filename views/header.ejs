@@ -93,11 +93,11 @@
                 </li>
                 <% if (!user) { %>
                 <li><a href="/login">登录</a></li>
-                <li><a href="/reg">注册</a></li>
+                <li><a href="/reg"> 注册</a></li>
                 <% } else { %>
                 <li>
                     <a data-toggle="dropdown" href="#" class="dropdown-toggle" style="padding-top: 8px;">
-                        <img class="img-circle" src="/images/user.jpg" />
+                        <img class="img-circle" width="35px" src="<%= user.pic %>" />
                         <i class="icon-caret-down"></i>
                     </a>
 
