@@ -46,8 +46,13 @@
                     if(respTxt.success == true)
                     {
                         $('#pwd_dialog').modal('hide');
+                        toastr.success(respTxt.msg);
+                        $('#pwd_dialog_form')[0].reset();
                     }
-                    toastr.success(respTxt.msg);
+                    else
+                    {
+                        toastr.error(respTxt.msg);
+                    }
                 }
             });
         }
@@ -136,7 +141,7 @@
                 <h4 class="modal-title" id="pwd_dialog_title">修改密码</h4>
             </div>
             <div class="modal-body">
-                <form role="form">
+                <form role="form" id="pwd_dialog_form">
                 <div class="form-group">
                     <label for="old_pwd">当 前 密 码</label>
                     <input type="password" class="form-control" id="old_pwd" name="old_pwd">
